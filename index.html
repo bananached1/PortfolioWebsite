@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevPortfolio</title>
+    
+    <!-- CSS Dependencies -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/locomotive-scroll/4.1.4/locomotive-scroll.min.css">
+    
+    <!-- JavaScript Dependencies -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/locomotive-scroll/4.1.4/locomotive-scroll.min.js"></script>
+    
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --text-primary: #333333;
+            --accent: #4a90e2;
+            --secondary: #f5f5f5;
+            --card-bg: #ffffff;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --about-bg: #f8f9fa;
+            --highlight: #4a90e2;
+            --card-border: rgba(74, 144, 226, 0.2);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #1a1a1a;
+            --text-primary: #ffffff;
+            --accent: #64b5f6;
+            --secondary: #2d2d2d;
+            --card-bg: #333333;
+            --shadow: rgba(255, 255, 255, 0.1);
+            --about-bg: #2d2d2d;
+            --highlight: #64ffda;
+            --card-border: rgba(100, 255, 218, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Enhanced Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: linear-gradient(135deg, var(--bg-primary), var(--secondary));
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                45deg,
+                var(--accent) 0,
+                var(--accent) 1px,
+                transparent 1px,
+                transparent 50px
+            );
+            opacity: 0.1;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translateX(-50px) translateY(-50px); }
+            100% { transform: translateX(0) translateY(0); }
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 1;
+            position: relative;
+            padding: 2rem;
+            background: rgba(var(--bg-primary), 0.8);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--accent), var(--highlight));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+
+        .hero p {
+            font-size: 1.8rem;
+            color: var(--text-primary);
+            opacity: 0.9;
+        }
+
+        /* Enhanced About Section */
+        .about-section {
+            min-height: 100vh;
+            background: var(--about-bg);
+            color: var(--text-primary);
+            position: relative;
+            padding: 4rem 0;
+        }
+
+        .content-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .title-sequence {
+            font-size: 3.5rem;
+            font-weight: bold;
+            margin-bottom: 2rem;
+            color: var(--highlight);
+            position: relative;
+            display: inline-block;
+        }
+
+        .bio-text {
+            max-width: 700px;
+            line-height: 1.8;
+        }
+
+        .highlight-word {
+            color: var(--highlight);
+            font-weight: 600;
+        }
+
+        .skill-tag {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            margin: 0.5rem;
+            background: rgba(var(--highlight), 0.1);
+            border: 1px solid var(--highlight);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .skill-tag:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px var(--shadow);
+        }
+
+        .projects {
+            padding: 6rem 2rem;
+            background: var(--bg-primary);
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 4rem;
+            color: var(--text-primary);
+        }
+
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .project-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 1px solid var(--card-border);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px var(--shadow);
+        }
+
+        .project-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--highlight);
+        }
+
+        .project-card p {
+            color: var(--text-primary);
+            opacity: 0.9;
+            margin-bottom: 1.5rem;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .project-tag {
+            padding: 0.3rem 0.8rem;
+            background: var(--secondary);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+        }
+
+        /* Contact Section */
+        .contact {
+            padding: 6rem 2rem;
+            background: var(--secondary);
+            position: relative;
+        }
+
+        .contact-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px var(--shadow);
+        }
+
+        .contact-form {
+            display: grid;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            font-size: 1.1rem;
+            color: var(--text-primary);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            padding: 1rem;
+            border: 2px solid var(--card-border);
+            border-radius: 8px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--highlight);
+        }
+
+        .submit-btn {
+            background: var(--highlight);
+            color: var(--bg-primary);
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+        }
+
+        /* Theme Toggle Button */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: var(--accent);
+            border: none;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            transition: transform 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(180deg);
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+            
+            .hero p {
+                font-size: 1.4rem;
+            }
+
+            .title-sequence {
+                font-size: 2.5rem;
+            }
+
+            .contact-container {
+                padding: 2rem;
+            }
+        }
+
+
+      .skills-container {
+        margin-bottom: 2rem;
+      }
+      
+      .skill-tag {
+          cursor: pointer;
+      }
+      
+      .skill-tag.active {
+          background: var(--highlight);
+          color: var(--bg-primary);
+      }
+      
+      .skill-content-container {
+          position: relative;
+          height: 0;
+          overflow: hidden;
+          transition: height 0.5s ease;
+      }
+      
+      .skill-content {
+          position: absolute; /* Changed from relative */
+          top: 0;
+          left: 5%;
+          width: 90%;
+          background: var(--card-bg);
+          border-radius: 15px;
+          padding: 2rem;
+          margin-top: 0; /* Changed from 2rem */
+          border: 1px solid var(--card-border);
+          opacity: 0;
+          transform: translateY(20px);
+          transition: opacity 0.3s ease, transform 0.3s ease;
+          visibility: hidden; /* Added visibility */
+      }
+      
+      .skill-content.active {
+          opacity: 1;
+          transform: translateY(0);
+          visibility: visible; /* Added visibility */
+      }
+      
+      .skill-content h3 {
+          color: var(--highlight);
+          margin-bottom: 1rem;
+          font-size: 1.8rem;
+      }
+      
+      .skill-content p {
+          margin-bottom: 1rem;
+          line-height: 1.6;
+      }
+      
+      .example-code {
+          background: var(--secondary);
+          padding: 1rem;
+          border-radius: 8px;
+          margin: 1rem 0;
+          font-family: monospace;
+      }
+
+      /* Progress Bar */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.1);
+            z-index: 100;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0;
+            background: var(--accent);
+            transition: width 0.1s ease;
+        }
+
+      .main-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 1.5rem 2rem;
+            z-index: 50;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(10px);
+            transform: translateY(-100%);
+            transition: transform 0.4s ease;
+        }
+
+        .main-nav.visible {
+            transform: translateY(0);
+        }
+      
+    </style>
+</head>
+<body data-scroll-container>
+    <div class="scroll-progress">
+        <div class="progress-bar"></div>
+    </div>
+    <button class="theme-toggle" aria-label="Toggle theme">🌓</button>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Fred Smith</h1>
+            <p>Full Stack and Random Stuff</p>
+        </div>
+    </section>
+
+    <section class="about-section">
+        <div class="content-container">
+            <h1 class="title-sequence">About Me</h1>
+            
+            <div class="bio-text">
+              <p>
+                  Hi, I’m <span class="highlight-word">Fred</span>, and I’m passionate about
+                  <span class="highlight-word">coding</span> to create engaging digital experiences. I primarily focus on 
+                  <span class="highlight-word">web development</span> and <span class="highlight-word">3D printing</span>, but I’m also skilled in other programming languages.
+              </p>
+              <p>
+                  I enjoy combining creativity and technology to work on innovative projects and constantly seek new challenges to grow my skills.
+              </p>
+          </div><br
+
+            
+            <div class="skills-container">
+              <div class="skill-tag" data-skill="javascript">Websites</div>
+              <div class="skill-tag" data-skill="webgl">3D Printing</div>
+              <div class="skill-tag" data-skill="threejs">Achievements</div>
+              <div class="skill-tag" data-skill="react">Learn HTML</div>
+              <div class="skill-tag" data-skill="gsap">School</div>
+              <div class="skill-tag" data-skill="css">Even More</div>
+          </div>
+          
+          <div class="skill-content-container">
+            <div class="skill-content" id="javascript-content">
+                <h3>Websites</h3>
+                <p>I create responsive and interactive websites using modern web technologies. Please contact me if you would like for me to make you a website, I can also encorperate things like databases and authentication. Here are some of my favorite projects:</p>
+                <ul style="list-style-type: disc; margin-left: 20px;">
+                    <li>Portfolio Website (This one!)</li>
+                    <li>Live messaging app for teams</li>
+                    <li>A fish related online encyclopedia</li>
+                </ul>
+            </div>
+        
+            <div class="skill-content" id="webgl-content">
+                <h3>3D Printing</h3>
+                <p>I love 3D printing and design, creating both functional and decorative pieces. Shout if you want me to 3D stuff for you (just pay for the filament). Some stuff I have made and loved:</p>
+                <ul style="list-style-type: disc; margin-left: 20px;">
+                    <li>Full size electric guitar</li>
+                    <li>Fun giraffe desk toy</li>
+                </ul>
+            </div>
+        
+            <div class="skill-content" id="threejs-content">
+                <h3>Achievements</h3>
+                <p>Where to start😂, Some of the awards I have got include</p>
+                <ul style="list-style-type: disc; margin-left: 20px;">
+                    <li>Two sets of junior academic colours</li>
+                    <li>Multiple Head Teachers Commendations</li>
+                    <li>Subject awards including DT</li>
+                </ul>
+            </div>
+        
+            <div class="skill-content" id="react-content">
+                <h3>Learn HTML</h3>
+                <p>If you would like to learn HTML from me or another langauge then contact me from the form at the bottom.</p>
+            </div>
+        
+            <div class="skill-content" id="gsap-content">
+                <h3>School</h3>
+                <p>My educational background:</p>
+                <ul style="list-style-type: disc; margin-left: 20px;">
+                    <li>Hitchin Boys School</li>
+                    <li>I you would like a full list of all the stuff I have done at school (F1 in schools, School Plays and Quadcopter finals) and grades etc then contact me</li>
+                    <li>I play Piano I guess...</li>
+                    <li>If you are here to ask for revision notes then fill out the form pls.</li>
+                </ul>
+            </div>
+        
+            <div class="skill-content" id="css-content">
+                <h3>Even More</h3>
+                <p>Additional skills and interests:</p>
+                <ul style="list-style-type: disc; margin-left: 20px;">
+                    <li>I do Fencing (with British Ranking)</li>
+                    <li>Game Development</li>
+                    <li>UI/UX Design</li>
+                    <li>Occasionally does some graphic design</li>
+                </ul>
+            </div>
+        </div>
+        </div>
+    </section>
+
+  <section class="projects">
+        <h2 class="section-title">Featured Projects</h2>
+        <div class="project-grid">
+            <div class="project-card">
+                <h3>E-commerce Platform</h3>
+                <p>A full-stack e-commerce solution with real-time inventory management and payment processing integration.</p>
+                <div class="project-tags">
+                    <span class="project-tag">React</span>
+                    <span class="project-tag">Node.js</span>
+                    <span class="project-tag">MongoDB</span>
+                </div>
+            </div>
+            <div class="project-card">
+                <h3>AI Chat Interface</h3>
+                <p>Real-time chat application with AI integration for automated customer support and inquiry handling.</p>
+                <div class="project-tags">
+                    <span class="project-tag">WebSocket</span>
+                    <span class="project-tag">Python</span>
+                    <span class="project-tag">TensorFlow</span>
+                </div>
+            </div>
+            <div class="project-card">
+                <h3>3D Portfolio</h3>
+                <p>Interactive 3D website showcasing creative works with immersive user experience and animations.</p>
+                <div class="project-tags">
+                    <span class="project-tag">Three.js</span>
+                    <span class="project-tag">WebGL</span>
+                    <span class="project-tag">GSAP</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact">
+        <h2 class="section-title">Get in Touch</h2>
+        <div class="contact-container">
+            <form class="contact-form">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" required placeholder="Your name">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" required placeholder="Your email">
+                </div>
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" rows="5" required placeholder="Your message"></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+    <script>
+        // Theme toggle functionality
+    const themeToggle = document.querySelector('.theme-toggle');
+    
+    function toggleTheme() {
+        const body = document.body;
+        const currentTheme = body.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        body.setAttribute('data-theme', newTheme);
+        
+        // Save theme preference
+        localStorage.setItem('theme', newTheme);
+    }
+
+    // Set initial theme based on user preference
+    function setInitialTheme() {
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            document.body.setAttribute('data-theme', savedTheme);
+        } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.body.setAttribute('data-theme', 'dark');
+        } else {
+            document.body.setAttribute('data-theme', 'light');  // Set default to light theme
+        }
+    }
+
+    themeToggle.addEventListener('click', toggleTheme);
+    setInitialTheme();  // Ensure the theme is set when the page loads
+
+        // Initialize animations
+        document.addEventListener('DOMContentLoaded', () => {
+        gsap.registerPlugin(ScrollTrigger);
+    
+        // Hero animations
+        gsap.from('.hero-content', {
+            opacity: 0,
+            y: 50,
+            duration: 1.5,
+            ease: 'power4.out'
+        });
+    
+        // About section animations
+        gsap.from('.title-sequence', {
+            opacity: 0,
+            y: 30,
+            duration: 1,
+            scrollTrigger: {
+                trigger: '.about-section',
+                start: 'top center+=100',
+                toggleActions: 'play none none reverse'
+            }
+        });
+    
+        gsap.from('.bio-text p', {
+            opacity: 0,
+            y: 30,
+            duration: 1,
+            stagger: 0.2,
+            scrollTrigger: {
+                trigger: '.bio-text',
+                start: 'top center+=100',
+                toggleActions: 'play none none reverse'
+            }
+        });
+    
+        gsap.from('.skill-tag', {
+            opacity: 0,
+            scale: 0.8,
+            duration: 0.5,
+            stagger: 0.1,
+            scrollTrigger: {
+                trigger: '.skills-container',
+                start: 'top center+=100',
+                toggleActions: 'play none none reverse'
+            }
+        });
+    
+        // Project cards animation
+        gsap.from('.project-card', {
+            opacity: 0,
+            y: 50,
+            duration: 1,
+            stagger: 0.2,
+            scrollTrigger: {
+                trigger: '.projects',
+                start: 'top center+=100',
+                toggleActions: 'play none none reverse'
+            }
+        });
+    
+        // Contact form animation
+        gsap.from('.contact-container', {
+            opacity: 0,
+            y: 50,
+            duration: 1,
+            scrollTrigger: {
+                trigger: '.contact',
+                start: 'top center+=100',
+                toggleActions: 'play none none reverse'
+            }
+        });
+    });
+
+
+      // Skill tags interaction
+      document.addEventListener('DOMContentLoaded', () => {
+          const skillTags = document.querySelectorAll('.skill-tag');
+          const skillContentContainer = document.querySelector('.skill-content-container');
+          const skillContents = document.querySelectorAll('.skill-content');
+          let activeContent = null;
+          let activeTag = null;
+      
+          function showContent(skillName) {
+              // Hide current active content
+              if (activeContent) {
+                  activeContent.classList.remove('active');
+                  if (activeTag) {
+                      activeTag.classList.remove('active');
+                  }
+              }
+      
+              // Show new content
+              const content = document.getElementById(`${skillName}-content`);
+              if (content) {
+                  skillContentContainer.style.height = `${content.offsetHeight}px`;
+                  content.classList.add('active');
+                  activeContent = content;
+              } else {
+                  skillContentContainer.style.height = '0px';
+              }
+          }
+      
+          skillTags.forEach(tag => {
+              tag.addEventListener('click', () => {
+                  const skillName = tag.dataset.skill;
+                  
+                  if (activeTag === tag) {
+                      // If clicking the same tag, close the content
+                      skillContentContainer.style.height = '0px';
+                      tag.classList.remove('active');
+                      if (activeContent) {
+                          activeContent.classList.remove('active');
+                      }
+                      activeTag = null;
+                      activeContent = null;
+                  } else {
+                      // Show new content
+                      tag.classList.add('active');
+                      activeTag = tag;
+                      showContent(skillName);
+                  }
+              });
+          });
+      
+          // Add resize observer to handle content height changes
+          const resizeObserver = new ResizeObserver(entries => {
+              for (let entry of entries) {
+                  if (entry.target.classList.contains('active')) {
+                      skillContentContainer.style.height = `${entry.target.offsetHeight}px`;
+                  }
+              }
+          });
+      
+          skillContents.forEach(content => {
+              resizeObserver.observe(content);
+          });
+      });
+
+    </script>
+</body>
+</html>
